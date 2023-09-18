@@ -1,0 +1,15 @@
+package api
+
+import "strconv"
+
+templ TodosList(todos []*Todo) {
+    <ul>
+    for _, todo := range todos {
+        <li>{todo.Name} - complete: {`todo.Complete`}</li>
+    }
+    </ul>
+}
+
+templ TodoSingle(todo *Todo) {
+    <li>{todo.Name} - complete: {strconv.FormatBool(todo.Complete)}</li>
+}

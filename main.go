@@ -3,74 +3,46 @@ package main
 import (
 	"embed"
 	"log"
-	"net/http"
 
+	"github.com/dfalgout/gofiber/api"
+	"github.com/dfalgout/gofiber/pages"
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/template/html/v2"
+	"github.com/gofiber/fiber/v2/middleware/compress"
+	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 )
-
-//go:embed views/*
-var views embed.FS
 
 //go:embed assets/*
 var assets embed.FS
 
-type Todo struct {
-	Name     string
-	Complete bool
+type Route struct {
+	Name string
+	Path string
 }
 
-type NewTodoInput struct {
-	Name     string
-	Complete string
-}
-
-var todos = make([]*Todo, 0)
+var loggedIn = false
 
 func main() {
-	// serverConfig := config.NewServerConfig()
-	engine := html.NewFileSystem(http.FS(views), ".html")
+	app := fiber.New()
 
-	app := fiber.New(fiber.Config{
-		Views: engine,
-	})
+	app.Use(logger.New())
+	app.Use(compress.New())
+	app.Use(recover.New())
 
 	app.Static("/assets", "assets")
 
-	api := app.Group("/api")
+	// view routes
+	homeRoutes := pages.NewHomeRoutes()
+	todosRoutes := pages.NewTodoRoutes()
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.Render("views/index", fiber.Map{
-			"Title": "Test",
-		}, "views/layouts/main")
-	})
+	app.Mount("/", homeRoutes.Routes)
+	app.Mount("/", todosRoutes.Routes)
 
-	api.Get("/todos", func(c *fiber.Ctx) error {
-		return c.Render("views/partials/todos/list", fiber.Map{
-			"Todos": todos,
-		})
-	})
+	// api routes
+	apiRoutes := app.Group("/api")
 
-	api.Post("/todos", func(c *fiber.Ctx) error {
-		newTodo := new(NewTodoInput)
-		if err := c.BodyParser(newTodo); err != nil {
-			return err
-		}
-
-		var complete = false
-		if newTodo.Complete == "true" {
-			complete = true
-		}
-		todo := &Todo{
-			Name:     newTodo.Name,
-			Complete: complete,
-		}
-		todos = append(todos, todo)
-
-		return c.Render("views/partials/todos/single", fiber.Map{
-			"Todo": todo,
-		})
-	})
+	todosApi := api.NewTodosApi()
+	apiRoutes.Mount("/todos", todosApi.Routes)
 
 	log.Fatal(app.Listen(":3000"))
 }
