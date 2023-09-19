@@ -22,7 +22,7 @@ func Page(title string) templ.Component {
 			var_1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, err = templBuffer.WriteString("<!doctype html><html><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><script src=\"https://unpkg.com/htmx.org@1.9.5\" defer>")
+		_, err = templBuffer.WriteString("<!doctype html><html x-data=\"{ color: &#39;dark&#39;, toggle() { this.color = this.color === &#39;dark&#39; ? &#39;light&#39; : &#39;dark&#39; } }\" :data-theme=\"color\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><script src=\"https://unpkg.com/htmx.org@1.9.5\" defer>")
 		if err != nil {
 			return err
 		}
@@ -40,7 +40,7 @@ func Page(title string) templ.Component {
 		if err != nil {
 			return err
 		}
-		_, err = templBuffer.WriteString("</script><script src=\"https://unpkg.com/hyperscript.org@0.9.9\" defer>")
+		_, err = templBuffer.WriteString("</script><script src=\"//unpkg.com/alpinejs\" defer>")
 		if err != nil {
 			return err
 		}
@@ -49,21 +49,12 @@ func Page(title string) templ.Component {
 		if err != nil {
 			return err
 		}
-		_, err = templBuffer.WriteString("</script><script src=\"//unpkg.com/alpinejs\" defer>")
-		if err != nil {
-			return err
-		}
-		var_5 := ``
-		_, err = templBuffer.WriteString(var_5)
-		if err != nil {
-			return err
-		}
 		_, err = templBuffer.WriteString("</script><link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css\"><title>")
 		if err != nil {
 			return err
 		}
-		var var_6 string = title
-		_, err = templBuffer.WriteString(templ.EscapeString(var_6))
+		var var_5 string = title
+		_, err = templBuffer.WriteString(templ.EscapeString(var_5))
 		if err != nil {
 			return err
 		}
@@ -71,7 +62,7 @@ func Page(title string) templ.Component {
 		if err != nil {
 			return err
 		}
-		var_7 := templ.ComponentFunc(func(ctx context.Context, w io.Writer) (err error) {
+		var_6 := templ.ComponentFunc(func(ctx context.Context, w io.Writer) (err error) {
 			templBuffer, templIsBuffer := w.(*bytes.Buffer)
 			if !templIsBuffer {
 				templBuffer = templ.GetBuffer()
@@ -86,7 +77,7 @@ func Page(title string) templ.Component {
 			}
 			return err
 		})
-		err = Layout().Render(templ.WithChildren(ctx, var_7), templBuffer)
+		err = Layout().Render(templ.WithChildren(ctx, var_6), templBuffer)
 		if err != nil {
 			return err
 		}
@@ -109,12 +100,12 @@ func Layout() templ.Component {
 			defer templ.ReleaseBuffer(templBuffer)
 		}
 		ctx = templ.InitializeContext(ctx)
-		var_8 := templ.GetChildren(ctx)
-		if var_8 == nil {
-			var_8 = templ.NopComponent
+		var_7 := templ.GetChildren(ctx)
+		if var_7 == nil {
+			var_7 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, err = templBuffer.WriteString("<main class=\"container\">")
+		_, err = templBuffer.WriteString("<main id=\"app\" class=\"container\">")
 		if err != nil {
 			return err
 		}
@@ -122,7 +113,7 @@ func Layout() templ.Component {
 		if err != nil {
 			return err
 		}
-		err = var_8.Render(ctx, templBuffer)
+		err = var_7.Render(ctx, templBuffer)
 		if err != nil {
 			return err
 		}
@@ -149,17 +140,17 @@ func Header() templ.Component {
 			defer templ.ReleaseBuffer(templBuffer)
 		}
 		ctx = templ.InitializeContext(ctx)
-		var_9 := templ.GetChildren(ctx)
-		if var_9 == nil {
-			var_9 = templ.NopComponent
+		var_8 := templ.GetChildren(ctx)
+		if var_8 == nil {
+			var_8 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
 		_, err = templBuffer.WriteString("<nav hx-boost=\"true\"><ul><li><strong>")
 		if err != nil {
 			return err
 		}
-		var_10 := `Awesome Todo List`
-		_, err = templBuffer.WriteString(var_10)
+		var_9 := `Awesome Todo List`
+		_, err = templBuffer.WriteString(var_9)
 		if err != nil {
 			return err
 		}
@@ -167,8 +158,8 @@ func Header() templ.Component {
 		if err != nil {
 			return err
 		}
-		var_11 := `Home`
-		_, err = templBuffer.WriteString(var_11)
+		var_10 := `Home`
+		_, err = templBuffer.WriteString(var_10)
 		if err != nil {
 			return err
 		}
@@ -176,12 +167,12 @@ func Header() templ.Component {
 		if err != nil {
 			return err
 		}
-		var_12 := `Todos`
-		_, err = templBuffer.WriteString(var_12)
+		var_11 := `Todos`
+		_, err = templBuffer.WriteString(var_11)
 		if err != nil {
 			return err
 		}
-		_, err = templBuffer.WriteString("</a></li></ul><ul><li x-data=\"{ dark: true }\"><button x-on:click=\"dark =! dark\" _=\"on click toggle [@data-theme=light] on &lt;html/&gt;\"><div x-text=\"dark ? &#39;dark&#39; : &#39;light&#39;\"></div></button></li></ul></nav>")
+		_, err = templBuffer.WriteString("</a></li></ul><ul><li><button @click=\"toggle\"><div x-text=\"color\"></div></button></li></ul></nav>")
 		if err != nil {
 			return err
 		}
@@ -200,17 +191,17 @@ func Footer() templ.Component {
 			defer templ.ReleaseBuffer(templBuffer)
 		}
 		ctx = templ.InitializeContext(ctx)
-		var_13 := templ.GetChildren(ctx)
-		if var_13 == nil {
-			var_13 = templ.NopComponent
+		var_12 := templ.GetChildren(ctx)
+		if var_12 == nil {
+			var_12 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
 		_, err = templBuffer.WriteString("<small>")
 		if err != nil {
 			return err
 		}
-		var_14 := `Footer`
-		_, err = templBuffer.WriteString(var_14)
+		var_13 := `Footer`
+		_, err = templBuffer.WriteString(var_13)
 		if err != nil {
 			return err
 		}

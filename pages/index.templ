@@ -2,13 +2,12 @@ package pages
 
 templ Page(title string) {
     <!DOCTYPE html>
-    <html>
+    <html x-data="{ color: 'dark', toggle() { this.color = this.color === 'dark' ? 'light' : 'dark' } }" :data-theme="color">
     <head>
         <meta charset="UTF-8"></meta>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
         <script src="https://unpkg.com/htmx.org@1.9.5" defer></script>
         <script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js" defer></script>
-        <script src="https://unpkg.com/hyperscript.org@0.9.9" defer></script>
         <script src="//unpkg.com/alpinejs" defer></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" />
         <title>{title}</title>
@@ -22,7 +21,7 @@ templ Page(title string) {
 }
 
 templ Layout() {
-    <main class="container">
+    <main id="app" class="container">
         @Header()
         { children... }
         @Footer()
@@ -31,20 +30,20 @@ templ Layout() {
 
 templ Header() {
     <nav hx-boost="true">
-    <ul>
-        <li><strong>Awesome Todo List</strong></li>
-    </ul>
-    <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/todos">Todos</a></li>
-    </ul>
-    <ul>
-        <li x-data="{ dark: true }">
-        <button x-on:click="dark =! dark" _="on click toggle [@data-theme=light] on <html/>">
-            <div x-text="dark ? 'dark' : 'light'"></div>
-        </button>
-        </li>
-    </ul>
+        <ul>
+            <li><strong>Awesome Todo List</strong></li>
+        </ul>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/todos">Todos</a></li>
+        </ul>
+        <ul>
+            <li>
+            <button @click="toggle">
+                <div x-text="color"></div>
+            </button>
+            </li>
+        </ul>
     </nav>
 }
 

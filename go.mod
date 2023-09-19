@@ -4,17 +4,14 @@ go 1.21.0
 
 require (
 	github.com/gofiber/fiber/v2 v2.49.1
-	github.com/gofiber/template/html/v2 v2.0.5
 	github.com/spf13/viper v1.16.0
 )
 
 require (
-	github.com/a-h/templ v0.2.334 // indirect
+	github.com/a-h/templ v0.2.334
 	github.com/andybalholm/brotli v1.0.5 // indirect
 	github.com/evanw/esbuild v0.19.3
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
-	github.com/gofiber/template v1.8.2 // indirect
-	github.com/gofiber/utils v1.1.0 // indirect
 	github.com/google/uuid v1.3.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/klauspost/compress v1.16.7 // indirect
