@@ -49,7 +49,7 @@ func Page(title string) templ.Component {
 		if err != nil {
 			return err
 		}
-		_, err = templBuffer.WriteString("</script><link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css\"><title>")
+		_, err = templBuffer.WriteString("</script><link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css\"><link rel=\"stylesheet\" href=\"/styles/templ.css\"><title>")
 		if err != nil {
 			return err
 		}

@@ -1,49 +1,54 @@
 package api
 
 import (
+	"log"
+
+	"github.com/dfalgout/gofiber/dal"
 	"github.com/dfalgout/gofiber/render"
 	"github.com/gofiber/fiber/v2"
 )
 
 type TodosApi struct {
-	Routes *fiber.App
+	routes *fiber.App
+	dal    *dal.Queries
 }
 
-func NewTodosApi() *TodosApi {
-	Routes := fiber.New()
-
-	Routes.Get("/", getTodos)
-	Routes.Post("/", createTodo)
+func NewTodosApi(dal *dal.Queries) *TodosApi {
+	routes := fiber.New()
 
 	return &TodosApi{
-		Routes,
+		routes,
+		dal,
 	}
-}
-
-type Todo struct {
-	Name     string
-	Complete bool
 }
 
 type NewTodoInput struct {
 	Name string
 }
 
-var todos = make([]*Todo, 0)
-
-func getTodos(c *fiber.Ctx) error {
+func (ta *TodosApi) getTodos(c *fiber.Ctx) error {
+	todos, err := ta.dal.ListTodos(c.Context())
+	if err != nil {
+		return err
+	}
+	log.Println(todos)
 	return render.Templ(c, TodosList(todos))
 }
 
-func createTodo(c *fiber.Ctx) error {
-	newTodo := new(NewTodoInput)
-	if err := c.BodyParser(newTodo); err != nil {
+func (ta *TodosApi) createTodo(c *fiber.Ctx) error {
+	newTodo := dal.CreateTodoParams{}
+	if err := c.BodyParser(&newTodo); err != nil {
 		return err
 	}
-	todo := &Todo{
-		Name: newTodo.Name,
+	todo, err := ta.dal.CreateTodo(c.Context(), newTodo)
+	if err != nil {
+		return err
 	}
-	todos = append(todos, todo)
-
 	return render.Templ(c, TodoSingle(todo))
+}
+
+func (ta *TodosApi) Register() *fiber.App {
+	ta.routes.Get("/todos", ta.getTodos)
+	ta.routes.Post("/todos", ta.createTodo)
+	return ta.routes
 }

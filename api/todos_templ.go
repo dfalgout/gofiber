@@ -9,9 +9,12 @@ import "context"
 import "io"
 import "bytes"
 
-import "strconv"
+import (
+	"github.com/dfalgout/gofiber/dal"
+	"strconv"
+)
 
-func TodosList(todos []*Todo) templ.Component {
+func TodosList(todos []dal.Todo) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) (err error) {
 		templBuffer, templIsBuffer := w.(*bytes.Buffer)
 		if !templIsBuffer {
@@ -47,7 +50,7 @@ func TodosList(todos []*Todo) templ.Component {
 			if err != nil {
 				return err
 			}
-			var var_4 string = `todo.Complete`
+			var var_4 string = strconv.FormatBool(todo.Complete.Bool)
 			_, err = templBuffer.WriteString(templ.EscapeString(var_4))
 			if err != nil {
 				return err
@@ -68,7 +71,7 @@ func TodosList(todos []*Todo) templ.Component {
 	})
 }
 
-func TodoSingle(todo *Todo) templ.Component {
+func TodoSingle(todo dal.Todo) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) (err error) {
 		templBuffer, templIsBuffer := w.(*bytes.Buffer)
 		if !templIsBuffer {
@@ -99,7 +102,7 @@ func TodoSingle(todo *Todo) templ.Component {
 		if err != nil {
 			return err
 		}
-		var var_8 string = strconv.FormatBool(todo.Complete)
+		var var_8 string = strconv.FormatBool(todo.Complete.Bool)
 		_, err = templBuffer.WriteString(templ.EscapeString(var_8))
 		if err != nil {
 			return err

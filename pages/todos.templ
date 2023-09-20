@@ -14,7 +14,7 @@ templ TodosPage() {
                 <small>This is a really helpful todo list</small>
                 <button>Create</button>
             </form>
-            <div hx-get="api/todos" hx-trigger="once" hx-swap="innerHTML" id="todos"></div>
+            <div hx-get="/api/todos" hx-trigger="load" hx-swap="innerHTML" id="todos"></div>
         </article>
     }
 }

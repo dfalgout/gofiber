@@ -64,7 +64,7 @@ func TodosPage() templ.Component {
 			if err != nil {
 				return err
 			}
-			_, err = templBuffer.WriteString("</button></form><div hx-get=\"api/todos\" hx-trigger=\"once\" hx-swap=\"innerHTML\" id=\"todos\"></div></article>")
+			_, err = templBuffer.WriteString("</button></form><div hx-get=\"/api/todos\" hx-trigger=\"load\" hx-swap=\"innerHTML\" id=\"todos\"></div></article>")
 			if err != nil {
 				return err
 			}

@@ -1,15 +1,18 @@
 package api
 
-import "strconv"
+import (
+    "strconv"
+    "github.com/dfalgout/gofiber/dal"
+)
 
-templ TodosList(todos []*Todo) {
+templ TodosList(todos []dal.Todo) {
     <ul>
     for _, todo := range todos {
-        <li>{todo.Name} - complete: {`todo.Complete`}</li>
+        <li>{todo.Name} - complete: {strconv.FormatBool(todo.Complete.Bool)}</li>
     }
     </ul>
 }
 
-templ TodoSingle(todo *Todo) {
-    <li>{todo.Name} - complete: {strconv.FormatBool(todo.Complete)}</li>
+templ TodoSingle(todo dal.Todo) {
+    <li>{todo.Name} - complete: {strconv.FormatBool(todo.Complete.Bool)}</li>
 }
