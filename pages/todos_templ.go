@@ -41,12 +41,12 @@ func TodosPage() templ.Component {
 			if err != nil {
 				return err
 			}
-			var_4 := `Name`
+			var_4 := `Name `
 			_, err = templBuffer.WriteString(var_4)
 			if err != nil {
 				return err
 			}
-			_, err = templBuffer.WriteString(" <input type=\"text\" name=\"name\" id=\"name\" placeholder=\"Take out trash\" required></label></div><small>")
+			_, err = templBuffer.WriteString("<input type=\"text\" name=\"name\" id=\"name\" placeholder=\"Take out trash\" required></label></div><small>")
 			if err != nil {
 				return err
 			}
@@ -64,7 +64,7 @@ func TodosPage() templ.Component {
 			if err != nil {
 				return err
 			}
-			_, err = templBuffer.WriteString("</button></form><div hx-get=\"/api/todos\" hx-trigger=\"load\" hx-swap=\"innerHTML\" id=\"todos\"></div></article>")
+			_, err = templBuffer.WriteString("</button></form><div hx-get=\"/api/todos\" hx-trigger=\"load\" hx-swap=\"innerHTML\"></div></article>")
 			if err != nil {
 				return err
 			}

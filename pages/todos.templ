@@ -1,20 +1,16 @@
 package pages
 
 templ TodosPage() {
-    @Page("Todos Page") {
-        <article>
-            <header>Todos</header>
-            <form hx-post="/api/todos" hx-target="#todos" hx-swap="beforeend" hx-ext="json-enc">
-                <div class="grid">
-                    <label for="name">
-                        Name
-                        <input type="text" name="name" id="name" placeholder="Take out trash" required />
-                    </label>
-                </div>
-                <small>This is a really helpful todo list</small>
-                <button>Create</button>
-            </form>
-            <div hx-get="/api/todos" hx-trigger="load" hx-swap="innerHTML" id="todos"></div>
-        </article>
-    }
+	@Page("Todos Page") {
+		<article>
+			<header>Todos</header>
+			<form hx-post="/api/todos" hx-target="#todos" hx-swap="beforeend" hx-ext="json-enc">
+				<div class="grid"><label for="name">Name <input type="text" name="name" id="name" placeholder="Take out trash" required/></label></div>
+				<small>This is a really helpful todo list</small>
+				<button>Create</button>
+			</form>
+			<div hx-get="/api/todos" hx-trigger="load" hx-swap="innerHTML"></div>
+		</article>
+	}
 }
+

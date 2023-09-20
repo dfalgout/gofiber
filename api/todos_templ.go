@@ -10,11 +10,11 @@ import "io"
 import "bytes"
 
 import (
-	"github.com/dfalgout/gofiber/dal"
+	"github.com/dfalgout/gofiber/ent"
 	"strconv"
 )
 
-func TodosList(todos []dal.Todo) templ.Component {
+func TodosList(todos []*ent.Todo) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) (err error) {
 		templBuffer, templIsBuffer := w.(*bytes.Buffer)
 		if !templIsBuffer {
@@ -27,7 +27,7 @@ func TodosList(todos []dal.Todo) templ.Component {
 			var_1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, err = templBuffer.WriteString("<ul>")
+		_, err = templBuffer.WriteString("<ul id=\"todos\">")
 		if err != nil {
 			return err
 		}
@@ -45,13 +45,18 @@ func TodosList(todos []dal.Todo) templ.Component {
 			if err != nil {
 				return err
 			}
-			var_3 := `- complete: `
+			var_3 := `- completed `
 			_, err = templBuffer.WriteString(var_3)
 			if err != nil {
 				return err
 			}
-			var var_4 string = strconv.FormatBool(todo.Complete.Bool)
+			var var_4 string = strconv.FormatBool(*todo.Completed)
 			_, err = templBuffer.WriteString(templ.EscapeString(var_4))
+			if err != nil {
+				return err
+			}
+			var_5 := `!`
+			_, err = templBuffer.WriteString(var_5)
 			if err != nil {
 				return err
 			}
@@ -71,7 +76,7 @@ func TodosList(todos []dal.Todo) templ.Component {
 	})
 }
 
-func TodoSingle(todo dal.Todo) templ.Component {
+func TodoSingle(todo *ent.Todo) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) (err error) {
 		templBuffer, templIsBuffer := w.(*bytes.Buffer)
 		if !templIsBuffer {
@@ -79,31 +84,32 @@ func TodoSingle(todo dal.Todo) templ.Component {
 			defer templ.ReleaseBuffer(templBuffer)
 		}
 		ctx = templ.InitializeContext(ctx)
-		var_5 := templ.GetChildren(ctx)
-		if var_5 == nil {
-			var_5 = templ.NopComponent
+		var_6 := templ.GetChildren(ctx)
+		if var_6 == nil {
+			var_6 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
 		_, err = templBuffer.WriteString("<li>")
 		if err != nil {
 			return err
 		}
-		var var_6 string = todo.Name
-		_, err = templBuffer.WriteString(templ.EscapeString(var_6))
+		var var_7 string = todo.Name
+		_, err = templBuffer.WriteString(templ.EscapeString(var_7))
 		if err != nil {
 			return err
 		}
-		_, err = templBuffer.WriteString(" ")
+		var_8 := `- completed `
+		_, err = templBuffer.WriteString(var_8)
 		if err != nil {
 			return err
 		}
-		var_7 := `- complete: `
-		_, err = templBuffer.WriteString(var_7)
+		var var_9 string = strconv.FormatBool(*todo.Completed)
+		_, err = templBuffer.WriteString(templ.EscapeString(var_9))
 		if err != nil {
 			return err
 		}
-		var var_8 string = strconv.FormatBool(todo.Complete.Bool)
-		_, err = templBuffer.WriteString(templ.EscapeString(var_8))
+		var_10 := `!`
+		_, err = templBuffer.WriteString(var_10)
 		if err != nil {
 			return err
 		}

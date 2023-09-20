@@ -2,17 +2,17 @@ package api
 
 import (
     "strconv"
-    "github.com/dfalgout/gofiber/dal"
+	"github.com/dfalgout/gofiber/ent"
 )
 
-templ TodosList(todos []dal.Todo) {
-    <ul>
-    for _, todo := range todos {
-        <li>{todo.Name} - complete: {strconv.FormatBool(todo.Complete.Bool)}</li>
-    }
-    </ul>
+templ TodosList(todos []*ent.Todo) {
+	<ul id="todos">
+		for _, todo := range todos {
+			<li>{ todo.Name } - completed { strconv.FormatBool(*todo.Completed) }!</li>
+		}
+	</ul>
 }
 
-templ TodoSingle(todo dal.Todo) {
-    <li>{todo.Name} - complete: {strconv.FormatBool(todo.Complete.Bool)}</li>
+templ TodoSingle(todo *ent.Todo) {
+	<li>{ todo.Name }- completed { strconv.FormatBool(*todo.Completed) }!</li>
 }
